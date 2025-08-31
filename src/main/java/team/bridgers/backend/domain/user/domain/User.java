@@ -18,20 +18,37 @@ public class User extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
     private String userId;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
+    private String gender;
+
+    @Column(nullable = false)
+    private String birthday;
+
+    @Column(nullable = false)
     private String type;
 
+    private boolean emailVerified = false;
 
     @Builder
-    private User(String email, String userId, String password, String type) {
+    private User(String email, String nickname, String userId, String password, String gender, String birthday, String type) {
         this.email = email;
+        this.nickname = nickname;
         this.userId = userId;
         this.password = password;
+        this.gender = gender;
+        this.birthday = birthday;
         this.type = type;
+    }
+
+    public void verifyEmail() {
+        this.emailVerified = true;
     }
 }
