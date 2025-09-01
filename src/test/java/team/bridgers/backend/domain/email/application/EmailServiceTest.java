@@ -9,17 +9,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
 import team.bridgers.backend.domain.email.domain.VerificationCode;
-import team.bridgers.backend.domain.email.frastructure.VerificationCodeRepository;
+import team.bridgers.backend.domain.email.infrastructure.VerificationCodeJpaRepository;
 import team.bridgers.backend.domain.email.presentation.request.SendVerificationCodeRequest;
 import team.bridgers.backend.domain.email.presentation.request.VerifyCodeRequest;
 import team.bridgers.backend.domain.email.presentation.response.DeleteVerificationCodeResponse;
 import team.bridgers.backend.domain.email.presentation.response.SendVerificationCodeResponse;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,11 +26,11 @@ class EmailServiceTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
+    private VerificationCodeJpaRepository verificationCodeJpaRepository;
 
     @AfterEach
     void tearDown() {
-        verificationCodeRepository.deleteAllInBatch();
+        verificationCodeJpaRepository.deleteAllInBatch();
     }
 
     @Test
@@ -49,7 +46,7 @@ class EmailServiceTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().Id()).isNotNull();
 
-        boolean exists = verificationCodeRepository.findByEmail("test@test.com").isPresent();
+        boolean exists = verificationCodeJpaRepository.findByEmail("test@test.com").isPresent();
         assertThat(exists).isTrue();
     }
 
@@ -65,7 +62,7 @@ class EmailServiceTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Optional<VerificationCode> saved = verificationCodeRepository.findByEmail(email);
+        Optional<VerificationCode> saved = verificationCodeJpaRepository.findByEmail(email);
         assertThat(saved).isPresent();
         assertThat(saved.get().getEmail()).isEqualTo(email);
     }
@@ -79,7 +76,7 @@ class EmailServiceTest {
                 .email(email)
                 .code(code)
                 .build();
-        verificationCodeRepository.save(verificationCode);
+        verificationCodeJpaRepository.save(verificationCode);
 
         VerifyCodeRequest request = VerifyCodeRequest.builder()
                 .email(email)
@@ -91,7 +88,7 @@ class EmailServiceTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(verificationCodeRepository.findByEmail(email)).isEmpty();
+        assertThat(verificationCodeJpaRepository.findByEmail(email)).isEmpty();
     }
 
     @Test
@@ -103,7 +100,7 @@ class EmailServiceTest {
                 .email(email)
                 .code(correctCode)
                 .build();
-        verificationCodeRepository.save(verificationCode);
+        verificationCodeJpaRepository.save(verificationCode);
 
         VerifyCodeRequest request = VerifyCodeRequest.builder()
                 .email(email)
@@ -125,7 +122,7 @@ class EmailServiceTest {
                 .email(email)
                 .code("000000")
                 .build();
-        verificationCodeRepository.save(verificationCode);
+        verificationCodeJpaRepository.save(verificationCode);
 
         VerifyCodeRequest request = VerifyCodeRequest.builder()
                 .email(email)
@@ -136,6 +133,6 @@ class EmailServiceTest {
                 restTemplate.postForEntity("/emails/verify-code", request, DeleteVerificationCodeResponse.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(verificationCodeRepository.findByEmail(email)).isEmpty();
+        assertThat(verificationCodeJpaRepository.findByEmail(email)).isEmpty();
     }
 }

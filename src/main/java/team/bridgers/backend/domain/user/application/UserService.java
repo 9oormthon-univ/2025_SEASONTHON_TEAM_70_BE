@@ -3,15 +3,13 @@ package team.bridgers.backend.domain.user.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import team.bridgers.backend.domain.email.application.EmailService;
 import team.bridgers.backend.domain.user.domain.Gender;
 import team.bridgers.backend.domain.user.domain.User;
+import team.bridgers.backend.domain.user.domain.UserRepository;
 import team.bridgers.backend.domain.user.domain.UserType;
-import team.bridgers.backend.domain.user.infrastructure.UserRepository;
-import team.bridgers.backend.domain.email.frastructure.VerificationCodeRepository;
+import team.bridgers.backend.domain.user.infrastructure.UserJpaRepository;
 import team.bridgers.backend.domain.user.presentation.response.SignUpResponse;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
