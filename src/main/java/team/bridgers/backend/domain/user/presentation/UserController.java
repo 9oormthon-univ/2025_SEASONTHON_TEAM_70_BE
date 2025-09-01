@@ -34,7 +34,7 @@ public class UserController{
         SignUpResponse response = userService.signUp(
                 request.loginId(), request.nickname(), request.email(),
                 request.password(), request.confirmPassword(), request.gender(),
-                request.birthday(), request.type(), request.interest()
+                request.birthday(), request.type()
         );
 
         return ResponseEntity.ok(response);

@@ -5,13 +5,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.bridgers.backend.domain.email.application.EmailService;
 import team.bridgers.backend.domain.user.domain.Gender;
-import team.bridgers.backend.domain.user.domain.Interest;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserType;
 import team.bridgers.backend.domain.user.infrastructure.UserRepository;
 import team.bridgers.backend.domain.email.frastructure.VerificationCodeRepository;
 import team.bridgers.backend.domain.user.presentation.response.SignUpResponse;
-import team.bridgers.backend.domain.user.presentation.response.UserDeleteResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +20,9 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final EmailService emailService;
-    private final VerificationCodeRepository verificationCodeRepository;
 
-    public SignUpResponse signUp(String loginId, String nickname, String email, String password, String confirmPassword, Gender gender, String birthday, UserType type, List<Interest> interest) {
-        if(userRepository.existsByUserId(loginId)) {
+    public SignUpResponse signUp(String loginId, String nickname, String email, String password, String confirmPassword, Gender gender, String birthday, UserType type) {
+        if(userRepository.existsByLoginId(loginId)) {
             throw new IllegalArgumentException("중복되는 아이디입니다.");
         }
         if(userRepository.existsByNickname(nickname)) {
@@ -35,10 +31,6 @@ public class UserService {
         if(!password.equals(confirmPassword)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        if(interest.size() > 3) {
-            throw new IllegalArgumentException("관심분야는 최대 3개까지만 선택 가능합니다.");
-        }
-
 
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder()

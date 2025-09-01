@@ -32,5 +32,6 @@ public class VerificationCode extends BaseTimeEntity {
     public VerificationCode(String email, String code) {
         this.email = email;
         this.code = code;
+        this.expireTime = LocalDateTime.now().plusMinutes(5);
     }
 }

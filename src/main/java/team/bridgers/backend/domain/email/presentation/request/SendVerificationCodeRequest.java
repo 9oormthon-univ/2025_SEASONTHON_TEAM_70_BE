@@ -7,7 +7,6 @@ import team.bridgers.backend.domain.user.domain.UserType;
 @NotBlank
 @Builder
 public record SendVerificationCodeRequest(
-        String email,
-        UserType type
+        String email
 ) {
 }

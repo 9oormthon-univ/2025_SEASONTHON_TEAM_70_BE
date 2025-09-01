@@ -2,11 +2,9 @@ package team.bridgers.backend.domain.user.presentation.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.lang.Nullable;
 import team.bridgers.backend.domain.user.domain.Gender;
-import team.bridgers.backend.domain.user.domain.Interest;
 import team.bridgers.backend.domain.user.domain.UserType;
 
 import java.util.List;
@@ -45,10 +43,7 @@ public record SignUpRequest (
         String birthday,
 
         @NotBlank
-        UserType type,
-
-        @Nullable
-        List<Interest> interest
+        UserType type
 ){
 
 }

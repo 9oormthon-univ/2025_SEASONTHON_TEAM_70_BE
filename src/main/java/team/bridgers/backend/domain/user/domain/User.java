@@ -35,8 +35,6 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private UserType type;
 
-    private boolean emailVerified = false;
-
     @Builder
     private User(String email, String nickname, String loginId, String password, Gender gender, String birthday, UserType type) {
         this.email = email;
@@ -46,9 +44,5 @@ public class User extends BaseTimeEntity {
         this.gender = gender;
         this.birthday = birthday;
         this.type = type;
-    }
-
-    public void verifyEmail() {
-        this.emailVerified = true;
     }
 }
