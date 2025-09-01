@@ -1,4 +1,4 @@
-package team.bridgers.backend.domain.user.domain;
+package team.bridgers.backend.domain.email.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
