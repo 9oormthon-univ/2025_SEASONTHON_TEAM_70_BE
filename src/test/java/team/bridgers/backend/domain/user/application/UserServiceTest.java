@@ -9,11 +9,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import team.bridgers.backend.domain.email.application.EmailService;
-import team.bridgers.backend.domain.email.frastructure.VerificationCodeRepository;
+import team.bridgers.backend.domain.email.infrastructure.VerificationCodeJpaRepository;
 import team.bridgers.backend.domain.user.domain.Gender;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserType;
-import team.bridgers.backend.domain.user.infrastructure.UserRepository;
+import team.bridgers.backend.domain.user.infrastructure.UserJpaRepository;
 import team.bridgers.backend.domain.user.presentation.request.SignUpRequest;
 
 import java.util.Optional;
@@ -32,14 +32,14 @@ class UserServiceTest {
     private EmailService emailService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
     @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
+    private VerificationCodeJpaRepository verificationCodeJpaRepository;
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAllInBatch();
+        userJpaRepository.deleteAllInBatch();
     }
 
     @Test
@@ -51,7 +51,7 @@ class UserServiceTest {
                 request.confirmPassword(),request.gender(), request.birthday(), request.type()
         );
 
-        Optional<User> user = userRepository.findByEmail(request.email());
+        Optional<User> user = userJpaRepository.findByEmail(request.email());
 
         assertThat(user.get().getEmail()).isEqualTo(request.email());
         assertThat(passwordEncoder.matches(request.password(),user.get().getPassword())).isTrue();
