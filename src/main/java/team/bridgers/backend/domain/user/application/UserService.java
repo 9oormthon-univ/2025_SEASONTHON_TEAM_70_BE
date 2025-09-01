@@ -25,8 +25,8 @@ public class UserService {
     private final EmailService emailService;
     private final VerificationCodeRepository verificationCodeRepository;
 
-    public SignUpResponse signUp(String userId, String nickname, String email, String password, String confirmPassword, Gender gender, String birthday, UserType type, List<Interest> interest) {
-        if(userRepository.existsByUserId(userId)) {
+    public SignUpResponse signUp(String loginId, String nickname, String email, String password, String confirmPassword, Gender gender, String birthday, UserType type, List<Interest> interest) {
+        if(userRepository.existsByUserId(loginId)) {
             throw new IllegalArgumentException("중복되는 아이디입니다.");
         }
         if(userRepository.existsByNickname(nickname)) {
@@ -42,7 +42,7 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder()
-                .userId(userId)
+                .loginId(loginId)
                 .email(email)
                 .nickname(nickname)
                 .password(encodedPassword)

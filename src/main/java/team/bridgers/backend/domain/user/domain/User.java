@@ -21,7 +21,7 @@ public class User extends BaseTimeEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String userId;
+    private String loginId;
 
     @Column(nullable = false)
     private String password;
@@ -38,10 +38,10 @@ public class User extends BaseTimeEntity {
     private boolean emailVerified = false;
 
     @Builder
-    private User(String email, String nickname, String userId, String password, Gender gender, String birthday, UserType type) {
+    private User(String email, String nickname, String loginId, String password, Gender gender, String birthday, UserType type) {
         this.email = email;
         this.nickname = nickname;
-        this.userId = userId;
+        this.loginId = loginId;
         this.password = password;
         this.gender = gender;
         this.birthday = birthday;

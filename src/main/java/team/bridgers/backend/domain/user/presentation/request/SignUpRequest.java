@@ -20,7 +20,7 @@ public record SignUpRequest (
 
         @NotBlank
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d){1,12}$")
-        String userId,
+        String loginId,
 
         @NotBlank
         @Pattern(regexp = "^")
