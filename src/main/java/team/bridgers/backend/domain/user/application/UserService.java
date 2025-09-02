@@ -8,6 +8,10 @@ import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
 import team.bridgers.backend.domain.user.domain.UserType;
 import team.bridgers.backend.domain.user.infrastructure.UserJpaRepository;
+import team.bridgers.backend.domain.user.presentation.exception.DuplicateLoginIdException;
+import team.bridgers.backend.domain.user.presentation.exception.DuplicateNicknameException;
+import team.bridgers.backend.domain.user.presentation.exception.PasswordMismatchException;
+import team.bridgers.backend.domain.user.presentation.exception.SignUpFailedException;
 import team.bridgers.backend.domain.user.presentation.response.SignUpResponse;
 
 import java.util.Optional;
@@ -21,13 +25,13 @@ public class UserService {
 
     public SignUpResponse signUp(String loginId, String nickname, String email, String password, String confirmPassword, Gender gender, String birthday, UserType type) {
         if(userRepository.existsByLoginId(loginId)) {
-            throw new IllegalArgumentException("중복되는 아이디입니다.");
+            throw new DuplicateLoginIdException();
         }
         if(userRepository.existsByNickname(nickname)) {
-            throw new IllegalArgumentException("중복되는 닉네임입니다.");
+            throw new DuplicateNicknameException();
         }
         if(!password.equals(confirmPassword)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new PasswordMismatchException();
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -49,7 +53,7 @@ public class UserService {
                     .Id(savedUser.get().getId())
                     .build();
         }
-        throw new IllegalArgumentException("회원가입에 문제가 발생하였습니다.");
+        throw new SignUpFailedException();
     }
 
     public boolean needsVerificationEmail(UserType type) {
