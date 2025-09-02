@@ -38,4 +38,9 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.save(user);
     }
 
+    @Override
+    public Optional<User> findByLoginId(String loginId) {
+        return userJpaRepository.findByLoginId(loginId);
+    }
+
 }

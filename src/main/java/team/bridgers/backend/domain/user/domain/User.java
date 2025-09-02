@@ -2,6 +2,8 @@ package team.bridgers.backend.domain.user.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import team.bridgers.backend.domain.user.presentation.exception.EmailOrPasswordNotInvalidException;
 import team.bridgers.backend.global.domain.BaseTimeEntity;
 
 @Getter
@@ -45,4 +47,11 @@ public class User extends BaseTimeEntity {
         this.birthday = birthday;
         this.type = type;
     }
+
+    public void checkPassword(PasswordEncoder passwordEncoder, String password) {
+        if (!passwordEncoder.matches(password, this.password)) {
+            throw new EmailOrPasswordNotInvalidException();
+        }
+    }
+
 }
