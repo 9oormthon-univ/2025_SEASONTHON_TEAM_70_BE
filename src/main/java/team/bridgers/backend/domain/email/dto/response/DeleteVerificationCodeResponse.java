@@ -1,11 +1,11 @@
-package team.bridgers.backend.domain.email.presentation.response;
+package team.bridgers.backend.domain.email.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @NotBlank
 @Builder
-public record SendVerificationCodeResponse(
+public record DeleteVerificationCodeResponse(
         Long Id
 ) {
 }

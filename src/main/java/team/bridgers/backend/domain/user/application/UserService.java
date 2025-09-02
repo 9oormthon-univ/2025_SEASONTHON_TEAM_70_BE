@@ -7,12 +7,11 @@ import team.bridgers.backend.domain.user.domain.Gender;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
 import team.bridgers.backend.domain.user.domain.UserType;
-import team.bridgers.backend.domain.user.infrastructure.UserJpaRepository;
 import team.bridgers.backend.domain.user.presentation.exception.DuplicateLoginIdException;
 import team.bridgers.backend.domain.user.presentation.exception.DuplicateNicknameException;
 import team.bridgers.backend.domain.user.presentation.exception.PasswordMismatchException;
 import team.bridgers.backend.domain.user.presentation.exception.SignUpFailedException;
-import team.bridgers.backend.domain.user.presentation.response.SignUpResponse;
+import team.bridgers.backend.domain.user.dto.response.SignUpResponse;
 
 import java.util.Optional;
 

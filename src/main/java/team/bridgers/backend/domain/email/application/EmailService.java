@@ -6,9 +6,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import team.bridgers.backend.domain.email.domain.VerificationCode;
 import team.bridgers.backend.domain.email.domain.VerificationCodeRepository;
-import team.bridgers.backend.domain.email.infrastructure.VerificationCodeJpaRepository;
-import team.bridgers.backend.domain.email.presentation.response.DeleteVerificationCodeResponse;
-import team.bridgers.backend.domain.email.presentation.response.SendVerificationCodeResponse;
+import team.bridgers.backend.domain.email.dto.response.DeleteVerificationCodeResponse;
+import team.bridgers.backend.domain.email.dto.response.SendVerificationCodeResponse;
 
 import java.util.Optional;
 

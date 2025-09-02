@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.bridgers.backend.domain.user.application.UserService;
-import team.bridgers.backend.domain.user.presentation.request.SignUpRequest;
-import team.bridgers.backend.domain.user.presentation.response.SignUpResponse;
+import team.bridgers.backend.domain.user.dto.request.SignUpRequest;
+import team.bridgers.backend.domain.user.dto.response.SignUpResponse;
 
 import java.util.Objects;
 

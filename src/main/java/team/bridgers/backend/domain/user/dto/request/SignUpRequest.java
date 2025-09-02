@@ -1,4 +1,4 @@
-package team.bridgers.backend.domain.user.presentation.request;
+package team.bridgers.backend.domain.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

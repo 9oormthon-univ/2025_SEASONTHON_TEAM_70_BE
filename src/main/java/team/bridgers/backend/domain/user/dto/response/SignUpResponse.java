@@ -1,4 +1,4 @@
-package team.bridgers.backend.domain.user.presentation.response;
+package team.bridgers.backend.domain.user.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
