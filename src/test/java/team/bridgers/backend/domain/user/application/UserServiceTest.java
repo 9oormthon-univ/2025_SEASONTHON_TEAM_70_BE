@@ -14,7 +14,7 @@ import team.bridgers.backend.domain.user.domain.Gender;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserType;
 import team.bridgers.backend.domain.user.infrastructure.UserJpaRepository;
-import team.bridgers.backend.domain.user.presentation.request.SignUpRequest;
+import team.bridgers.backend.domain.user.dto.request.SignUpRequest;
 
 import java.util.Optional;
 

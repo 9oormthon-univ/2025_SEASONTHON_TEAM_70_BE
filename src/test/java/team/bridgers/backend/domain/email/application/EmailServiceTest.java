@@ -11,10 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import team.bridgers.backend.domain.email.domain.VerificationCode;
 import team.bridgers.backend.domain.email.infrastructure.VerificationCodeJpaRepository;
-import team.bridgers.backend.domain.email.presentation.request.SendVerificationCodeRequest;
-import team.bridgers.backend.domain.email.presentation.request.VerifyCodeRequest;
-import team.bridgers.backend.domain.email.presentation.response.DeleteVerificationCodeResponse;
-import team.bridgers.backend.domain.email.presentation.response.SendVerificationCodeResponse;
+import team.bridgers.backend.domain.email.dto.request.SendVerificationCodeRequest;
+import team.bridgers.backend.domain.email.dto.request.VerifyCodeRequest;
+import team.bridgers.backend.domain.email.dto.response.DeleteVerificationCodeResponse;
+import team.bridgers.backend.domain.email.dto.response.SendVerificationCodeResponse;
 
 import java.util.Optional;
 
