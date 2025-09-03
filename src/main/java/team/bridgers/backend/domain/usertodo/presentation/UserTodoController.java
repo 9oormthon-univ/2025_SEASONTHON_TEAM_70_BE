@@ -3,13 +3,11 @@ package team.bridgers.backend.domain.usertodo.presentation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.bridgers.backend.domain.usertodo.application.UserTodoService;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSaveResponse;
+import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateCompletedResponse;
 import team.bridgers.backend.global.annotation.MemberId;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -28,6 +26,15 @@ public class UserTodoController {
     ) {
         UserTodoSaveResponse response = userTodoService.saveUserTodo(userId, request);
         return ResponseEntity.status(CREATED).body(response);
+    }
+
+    @PatchMapping("/{userTodoId}/completed")
+    public ResponseEntity<UserTodoUpdateCompletedResponse> toggleCompleted(
+            @MemberId Long userId,
+            @PathVariable(name = "userTodoId") Long userTodoId
+    ) {
+        UserTodoUpdateCompletedResponse response = userTodoService.toggleCompleted(userId, userTodoId);
+        return ResponseEntity.ok(response);
     }
 
 }

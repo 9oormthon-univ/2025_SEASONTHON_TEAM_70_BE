@@ -4,4 +4,6 @@ public interface UserTodoRepository {
 
     void save(UserTodo userTodo);
 
+    UserTodo findByUserTodoId(Long userTodoId);
+
 }
