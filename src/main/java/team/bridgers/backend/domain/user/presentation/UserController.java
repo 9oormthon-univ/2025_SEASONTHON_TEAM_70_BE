@@ -27,9 +27,6 @@ public class UserController{
             String errorMessage = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
             return ResponseEntity.badRequest().body(errorMessage);
         }
-        if(userService.needsVerificationEmail(request.type())){
-            return ResponseEntity.status(202).body("이메일 인증이 필요합니다.");
-        }
 
         SignUpResponse response = userService.signUp(
                 request.loginId(), request.nickname(), request.email(),
