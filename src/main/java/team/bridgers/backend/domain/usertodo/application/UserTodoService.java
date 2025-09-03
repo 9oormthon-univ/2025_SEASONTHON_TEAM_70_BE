@@ -9,8 +9,12 @@ import team.bridgers.backend.domain.usertodo.domain.Priority;
 import team.bridgers.backend.domain.usertodo.domain.UserTodo;
 import team.bridgers.backend.domain.usertodo.domain.UserTodoRepository;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
+import team.bridgers.backend.domain.usertodo.dto.response.UserTodoDetailResponse;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSaveResponse;
+import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSummaryListResponse;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateCompletedResponse;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -54,6 +58,27 @@ public class UserTodoService {
         return UserTodoUpdateCompletedResponse.builder()
                 .userTodoId(userTodo.getId())
                 .completed(userTodo.isCompleted())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public UserTodoSummaryListResponse getAllUserTodos(Long userId, String sortBy) {
+        User user = userRepository.findById(userId);
+
+        List<UserTodo> userTodos = userTodoRepository.findAllByUser(user, sortBy);
+
+        List<UserTodoDetailResponse> detailResponses = userTodos.stream()
+                .map(todo -> UserTodoDetailResponse.builder()
+                        .userTodoId(todo.getId())
+                        .task(todo.getTask())
+                        .deadLine(todo.getDeadLine())
+                        .priority(todo.getPriority().name())
+                        .completed(todo.isCompleted())
+                        .build())
+                .toList();
+
+        return UserTodoSummaryListResponse.builder()
+                .userTodoDetailResponses(detailResponses)
                 .build();
     }
 
