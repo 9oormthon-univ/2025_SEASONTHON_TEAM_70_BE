@@ -16,7 +16,7 @@ import team.bridgers.backend.global.auth.dto.response.LoginResultResponse;
 @RequiredArgsConstructor
 @RequestMapping("/login")
 @RestController
-public class AuthController {
+public class AuthController implements AuthDocsController {
 
     private final AuthService authService;
 
