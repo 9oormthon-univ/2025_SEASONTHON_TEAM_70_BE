@@ -7,6 +7,7 @@ import team.bridgers.backend.domain.user.domain.Gender;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
 import team.bridgers.backend.domain.user.domain.UserType;
+import team.bridgers.backend.domain.user.dto.request.SignUpRequest;
 import team.bridgers.backend.domain.user.presentation.exception.DuplicateLoginIdException;
 import team.bridgers.backend.domain.user.presentation.exception.DuplicateNicknameException;
 import team.bridgers.backend.domain.user.presentation.exception.PasswordMismatchException;
@@ -22,31 +23,31 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public SignUpResponse signUp(String loginId, String nickname, String email, String password, String confirmPassword, Gender gender, String birthday, UserType type) {
-        if(userRepository.existsByLoginId(loginId)) {
+    public SignUpResponse signUp(SignUpRequest request) {
+        if(userRepository.existsByLoginId(request.loginId())) {
             throw new DuplicateLoginIdException();
         }
-        if(userRepository.existsByNickname(nickname)) {
+        if(userRepository.existsByNickname(request.nickname())) {
             throw new DuplicateNicknameException();
         }
-        if(!password.equals(confirmPassword)) {
+        if(!request.password().equals(request.confirmPassword())) {
             throw new PasswordMismatchException();
         }
 
-        String encodedPassword = passwordEncoder.encode(password);
+        String encodedPassword = passwordEncoder.encode(request.password());
         User user = User.builder()
-                .loginId(loginId)
-                .email(email)
-                .nickname(nickname)
+                .loginId(request.loginId())
+                .email(request.email())
+                .nickname(request.nickname())
                 .password(encodedPassword)
-                .gender(gender)
-                .birthday(birthday)
-                .type(type)
+                .gender(request.gender())
+                .birthday(request.birthday())
+                .type(request.type())
                 .build();
 
         userRepository.save(user);
 
-        User savedUser = userRepository.findByEmail(email);
+        User savedUser = userRepository.findByEmail(request.email());
         if(savedUser != null) {
             return SignUpResponse.builder()
                     .Id(savedUser.getId())

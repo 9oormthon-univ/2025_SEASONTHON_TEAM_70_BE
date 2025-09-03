@@ -23,11 +23,7 @@ public class UserController{
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest request) {
-        SignUpResponse response = userService.signUp(
-                request.loginId(), request.nickname(), request.email(),
-                request.password(), request.confirmPassword(), request.gender(),
-                request.birthday(), request.type()
-        );
+        SignUpResponse response = userService.signUp(request);
 
         return ResponseEntity.ok(response);
     }
