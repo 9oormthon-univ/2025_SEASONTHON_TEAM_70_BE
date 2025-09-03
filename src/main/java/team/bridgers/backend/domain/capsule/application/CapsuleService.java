@@ -14,6 +14,7 @@ import team.bridgers.backend.domain.capsule.dto.response.ChangeCapsuleVisibility
 import team.bridgers.backend.domain.capsule.dto.response.CreateCapsuleResponse;
 import team.bridgers.backend.domain.capsule.dto.response.DeleteCapsuleResponse;
 import team.bridgers.backend.domain.capsule.presentation.exception.NoDeleteAuthorityException;
+import team.bridgers.backend.domain.capsule.presentation.exception.NoUpdateAuthorityException;
 import team.bridgers.backend.domain.capsule.presentation.exception.SameVisibilityException;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
@@ -103,10 +104,14 @@ public class CapsuleService {
 
 
     @Transactional
-    public ChangeCapsuleVisibilityResponse changeCapsuleVisibility(Long capsuleId, Visibility visibility) {
+    public ChangeCapsuleVisibilityResponse changeCapsuleVisibility(Long memberId, Long capsuleId, Visibility visibility) {
         Capsule capsule = capsuleRepository.findById(capsuleId);
 
-        if(capsule.getVisibility() == visibility) {
+        if (!Objects.equals(capsule.getUser().getId(), memberId)) {
+            throw new NoUpdateAuthorityException();
+        }
+
+        if (capsule.getVisibility() == visibility) {
             throw new SameVisibilityException();
         }
         capsule.updateCapsule(visibility);

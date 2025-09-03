@@ -33,11 +33,8 @@ public class CapsuleRepositoryImpl implements CapsuleRepository {
     @Override
     public Capsule findById(Long capsuleId) {
 
-        Optional<Capsule> savedCapsule = capsuleJpaRepository.findById(capsuleId);
+        return capsuleJpaRepository.findById(capsuleId)
+                .orElseThrow(CapsuleNotFoundException::new);
 
-        if (savedCapsule.isPresent()) {
-            return savedCapsule.get();
-        }
-        throw new CapsuleNotFoundException();
     }
 }

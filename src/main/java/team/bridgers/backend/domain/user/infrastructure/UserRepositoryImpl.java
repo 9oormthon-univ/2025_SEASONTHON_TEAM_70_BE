@@ -27,25 +27,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findById(Long userId) {
 
-        Optional<User> savedUser = userJpaRepository.findById(userId);
-
-        if(savedUser.isPresent()) {
-            return savedUser.get();
-        }
-
-        throw new UserNotFoundException();
+        return userJpaRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public User findByEmail(String email) {
 
-        Optional<User> savedUser = userJpaRepository.findByEmail(email);
-
-        if(savedUser.isPresent()) {
-            return savedUser.get();
-        }
-
-        throw new UserNotFoundException();
+        return userJpaRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
     }
 
@@ -57,13 +45,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByLoginId(String loginId) {
 
-        Optional<User> savedUser = userJpaRepository.findByLoginId(loginId);
+        return userJpaRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
 
-        if(savedUser.isPresent()) {
-            return savedUser.get();
-        }
-
-        throw new UserNotFoundException();
     }
 
 }

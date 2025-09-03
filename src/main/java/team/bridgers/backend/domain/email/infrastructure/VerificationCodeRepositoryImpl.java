@@ -17,12 +17,9 @@ public class VerificationCodeRepositoryImpl implements VerificationCodeRepositor
     @Override
     public VerificationCode findByEmail(String email) {
 
-        Optional<VerificationCode> verificationCode = verificationCodeJpaRepository.findByEmail(email);
+        return verificationCodeJpaRepository.findByEmail(email)
+                .orElseThrow(VerificationCodeNotFoundException::new);
 
-        if(verificationCode.isPresent()) {
-            return verificationCode.get();
-        }
-        throw new VerificationCodeNotFoundException();
     }
 
     @Override

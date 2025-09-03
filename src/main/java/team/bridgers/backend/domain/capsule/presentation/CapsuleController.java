@@ -58,8 +58,8 @@ public class CapsuleController {
     }
 
     @PutMapping("/{capsuleId}")
-    public ResponseEntity<ChangeCapsuleVisibilityResponse> changeCapsuleVisibility(@PathVariable("capsuleId") Long capsuleId, ChangeCapsuleVisibilityRequest changeCapsuleVisibilityRequest) {
-        ChangeCapsuleVisibilityResponse response = capsuleService.changeCapsuleVisibility(capsuleId, changeCapsuleVisibilityRequest.visibility());
+    public ResponseEntity<ChangeCapsuleVisibilityResponse> changeCapsuleVisibility(@MemberId Long memberId, @PathVariable("capsuleId") Long capsuleId, ChangeCapsuleVisibilityRequest changeCapsuleVisibilityRequest) {
+        ChangeCapsuleVisibilityResponse response = capsuleService.changeCapsuleVisibility(memberId, capsuleId, changeCapsuleVisibilityRequest.visibility());
         return ResponseEntity.ok(response);
     }
 
