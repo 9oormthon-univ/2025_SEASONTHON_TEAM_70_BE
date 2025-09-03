@@ -22,12 +22,7 @@ public class UserController{
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errorMessage = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-            return ResponseEntity.badRequest().body(errorMessage);
-        }
-
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest request) {
         SignUpResponse response = userService.signUp(
                 request.loginId(), request.nickname(), request.email(),
                 request.password(), request.confirmPassword(), request.gender(),
