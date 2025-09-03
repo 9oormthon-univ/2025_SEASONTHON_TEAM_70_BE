@@ -24,15 +24,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     public SignUpResponse signUp(SignUpRequest request) {
-        if(userRepository.existsByLoginId(request.loginId())) {
-            throw new DuplicateLoginIdException();
-        }
-        if(userRepository.existsByNickname(request.nickname())) {
-            throw new DuplicateNicknameException();
-        }
-        if(!request.password().equals(request.confirmPassword())) {
-            throw new PasswordMismatchException();
-        }
+        validateDuplicateLoginId(request.loginId());
+        validateDuplicateNickname(request.nickname());
+        validatePasswordMatch(request.password(), request.confirmPassword());
 
         String encodedPassword = passwordEncoder.encode(request.password());
         User user = User.builder()
@@ -48,7 +42,7 @@ public class UserService {
         userRepository.save(user);
 
         User savedUser = userRepository.findByEmail(request.email());
-        if(savedUser != null) {
+        if (savedUser != null) {
             return SignUpResponse.builder()
                     .Id(savedUser.getId())
                     .build();
@@ -57,6 +51,25 @@ public class UserService {
     }
 
     public boolean needsVerificationEmail(UserType type) {
-        return type == UserType.STUDENT|| type == UserType.WORKER;
+        return type == UserType.STUDENT || type == UserType.WORKER;
     }
+
+    private void validateDuplicateLoginId(String loginId) {
+        if (userRepository.existsByLoginId(loginId)) {
+            throw new DuplicateLoginIdException();
+        }
+    }
+
+    private void validateDuplicateNickname(String nickname) {
+        if (userRepository.existsByNickname(nickname)) {
+            throw new DuplicateNicknameException();
+        }
+    }
+
+    private void validatePasswordMatch(String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordMismatchException();
+        }
+    }
+
 }
