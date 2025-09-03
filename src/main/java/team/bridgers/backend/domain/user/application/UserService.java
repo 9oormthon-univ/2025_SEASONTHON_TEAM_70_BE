@@ -41,13 +41,9 @@ public class UserService {
 
         userRepository.save(user);
 
-        User savedUser = userRepository.findByEmail(request.email());
-        if (savedUser != null) {
-            return SignUpResponse.builder()
-                    .Id(savedUser.getId())
-                    .build();
-        }
-        throw new SignUpFailedException();
+        return SignUpResponse.builder()
+                .Id(user.getId())
+                .build();
     }
 
     public boolean needsVerificationEmail(UserType type) {
