@@ -10,6 +10,7 @@ import team.bridgers.backend.domain.usertodo.domain.UserTodo;
 import team.bridgers.backend.domain.usertodo.domain.UserTodoRepository;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSaveResponse;
+import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateCompletedResponse;
 
 @RequiredArgsConstructor
 @Service
@@ -32,6 +33,27 @@ public class UserTodoService {
 
         return UserTodoSaveResponse.builder()
                 .userTodoId(userTodo.getId())
+                .build();
+    }
+
+    @Transactional
+    public UserTodoUpdateCompletedResponse toggleCompleted(
+            Long userId,
+            Long userTodoId
+    ) {
+        userRepository.findById(userId);
+
+        UserTodo userTodo = userTodoRepository.findByUserTodoId(userTodoId);
+
+        if (userTodo.isCompleted()) {
+            userTodo.uncomplete();
+        } else {
+            userTodo.complete();
+        }
+
+        return UserTodoUpdateCompletedResponse.builder()
+                .userTodoId(userTodo.getId())
+                .completed(userTodo.isCompleted())
                 .build();
     }
 

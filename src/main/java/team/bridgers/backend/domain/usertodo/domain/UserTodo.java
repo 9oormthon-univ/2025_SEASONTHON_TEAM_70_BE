@@ -44,4 +44,12 @@ public class UserTodo extends BaseTimeEntity {
         this.priority = priority;
     }
 
+    public void complete() {
+        this.completed = true;
+    }
+
+    public void uncomplete() {
+        this.completed = false;
+    }
+
 }
