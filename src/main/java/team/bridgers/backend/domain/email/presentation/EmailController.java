@@ -13,7 +13,7 @@ import team.bridgers.backend.domain.email.dto.response.SendVerificationCodeRespo
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/emails")
-public class EmailController {
+public class EmailController implements EmailDocsController {
 
     private final EmailService emailService;
 
