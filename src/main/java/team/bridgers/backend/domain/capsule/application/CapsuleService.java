@@ -1,104 +1,119 @@
 package team.bridgers.backend.domain.capsule.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.bridgers.backend.domain.capsule.domain.Capsule;
+import team.bridgers.backend.domain.capsule.domain.CapsuleRepository;
 import team.bridgers.backend.domain.capsule.domain.Visibility;
 import team.bridgers.backend.domain.capsule.dto.request.CreateCapsuleRequest;
 import team.bridgers.backend.domain.capsule.dto.response.CapsuleInfoResponse;
 import team.bridgers.backend.domain.capsule.dto.response.ChangeCapsuleVisibilityResponse;
 import team.bridgers.backend.domain.capsule.dto.response.CreateCapsuleResponse;
 import team.bridgers.backend.domain.capsule.dto.response.DeleteCapsuleResponse;
-import team.bridgers.backend.domain.capsule.infrastructure.CapsuleRepositoryImpl;
+import team.bridgers.backend.domain.capsule.presentation.exception.NoDeleteAuthorityException;
+import team.bridgers.backend.domain.capsule.presentation.exception.SameVisibilityException;
 import team.bridgers.backend.domain.user.domain.User;
-import team.bridgers.backend.domain.user.infrastructure.UserRepositoryImpl;
+import team.bridgers.backend.domain.user.domain.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class CapsuleService {
 
-    private final CapsuleRepositoryImpl capsuleRepository;
+    private final CapsuleRepository capsuleRepository;
 
-    private final UserRepositoryImpl userRepository;
+    private final UserRepository userRepository;
 
+    @Transactional
     public CreateCapsuleResponse createCapsule(Long userId, CreateCapsuleRequest createCapsuleRequest) {
 
-        Optional<User> user = userRepository.findByUserId(userId);
+        User user = userRepository.findById(userId);
 
         Capsule capsule = Capsule.builder()
                 .title(createCapsuleRequest.title())
                 .content(createCapsuleRequest.content())
-                .user(user.get())
+                .user(user)
                 .build();
 
         capsuleRepository.save(capsule);
 
-        Optional<Capsule> savedCapsule = capsuleRepository.findByTitle(createCapsuleRequest.title());
-
         return CreateCapsuleResponse.builder()
-                .capsuleId(savedCapsule.get().getId())
+                .capsuleId(capsule.getId())
                 .build();
 
     }
 
+    @Transactional(readOnly = true)
     public CapsuleInfoResponse getCapsule(Long capsuleId) {
 
-        Optional<Capsule> capsule = capsuleRepository.findById(capsuleId);
+        Capsule capsule = capsuleRepository.findById(capsuleId);
 
         return CapsuleInfoResponse.builder()
-                .title(capsule.get().getTitle())
-                .content(capsule.get().getContent())
-                .createdAt(capsule.get().getCreatedAt())
+                .title(capsule.getTitle())
+                .content(capsule.getContent())
+                .createdAt(capsule.getCreatedAt())
                 .build();
 
     }
 
-    public List<CapsuleInfoResponse> getAllCapsule(Long userId) {
-        List<Capsule> capsules = capsuleRepository.findAllByUserId(userId);
-        return capsules.stream()
-                .map(capsule -> CapsuleInfoResponse.builder()
-                    .title(capsule.getTitle())
-                    .content(capsule.getContent())
-                    .createdAt(capsule.getCreatedAt())
-                    .build())
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<CapsuleInfoResponse> getMyAllCapsule(Long userId ,Pageable pageable) {
+
+        Page<Capsule> capsules = capsuleRepository.findAllByUserId(userId, pageable);
+
+        return capsules.map(capsule -> CapsuleInfoResponse.builder()
+                .title(capsule.getTitle())
+                .content(capsule.getContent())
+                .createdAt(capsule.getCreatedAt())
+                .build());
+
     }
 
-    public DeleteCapsuleResponse deleteCapsule(Long capsuleId) {
+    @Transactional
+    public DeleteCapsuleResponse deleteCapsule(Long userId, Long capsuleId) {
 
-        Optional<Capsule> capsule = capsuleRepository.findById(capsuleId);
+        Capsule capsule = capsuleRepository.findById(capsuleId);
 
-        capsuleRepository.delete(capsule.get());
+        if(!Objects.equals(capsule.getId(), userId)) {
+            throw new NoDeleteAuthorityException();
+        }
+        capsuleRepository.delete(capsule);
 
         return DeleteCapsuleResponse.builder()
-                .capsuleId(capsule.get().getId())
-                .title(capsule.get().getTitle())
+                .capsuleId(capsule.getId())
                 .build();
     }
 
-    public List<CapsuleInfoResponse> getAllVisibleCapsule() {
+    @Transactional(readOnly = true)
+    public Page<CapsuleInfoResponse> getAllVisibleCapsule(Pageable pageable) {
 
-        List<Capsule> capsules = capsuleRepository.findAllByVisibility(Visibility.VISIBLE);
+        Page<Capsule> capsules = capsuleRepository.findAllByVisibility(Visibility.VISIBLE, pageable);
 
-        return capsules.stream()
-                .map(capsule -> CapsuleInfoResponse.builder()
-                        .title(capsule.getTitle())
-                        .content(capsule.getContent())
-                        .createdAt(capsule.getCreatedAt())
-                        .build())
-                .toList();
+        return capsules.map(capsule -> CapsuleInfoResponse.builder()
+                .title(capsule.getTitle())
+                .content(capsule.getContent())
+                .createdAt(capsule.getCreatedAt())
+                .build());
+
     }
 
-    public ChangeCapsuleVisibilityResponse changeCapsuleVisibility(Long capsuleId) {
-        Optional<Capsule> capsule = capsuleRepository.findById(capsuleId);
-        capsule.get().updateCapsule();
+
+    @Transactional
+    public ChangeCapsuleVisibilityResponse changeCapsuleVisibility(Long capsuleId, Visibility visibility) {
+        Capsule capsule = capsuleRepository.findById(capsuleId);
+
+        if(capsule.getVisibility() == visibility) {
+            throw new SameVisibilityException();
+        }
+        capsule.updateCapsule(visibility);
+
         return ChangeCapsuleVisibilityResponse.builder()
-                .capsuleId(capsule.get().getId())
-                .visibility(capsule.get().getVisibility())
+                .capsuleId(capsule.getId())
+                .visibility(capsule.getVisibility())
                 .build();
     }
 

@@ -22,8 +22,8 @@ public class AuthService {
 
     @Transactional
     public LoginResultResponse login(String loginId, String password, HttpServletResponse response) {
-        User user = userRepository.findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByLoginId(loginId);
+
         user.checkPassword(passwordEncoder, password);
 
         LoginResultResponse result = loginProcessor.generateLoginResult(user.getId());

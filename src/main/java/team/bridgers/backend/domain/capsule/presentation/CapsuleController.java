@@ -2,9 +2,12 @@ package team.bridgers.backend.domain.capsule.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.bridgers.backend.domain.capsule.application.CapsuleService;
+import team.bridgers.backend.domain.capsule.dto.request.ChangeCapsuleVisibilityRequest;
 import team.bridgers.backend.domain.capsule.dto.request.CreateCapsuleRequest;
 import team.bridgers.backend.domain.capsule.dto.response.CapsuleInfoResponse;
 import team.bridgers.backend.domain.capsule.dto.response.ChangeCapsuleVisibilityResponse;
@@ -12,7 +15,7 @@ import team.bridgers.backend.domain.capsule.dto.response.CreateCapsuleResponse;
 import team.bridgers.backend.domain.capsule.dto.response.DeleteCapsuleResponse;
 import team.bridgers.backend.global.annotation.MemberId;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/capsules")
@@ -27,27 +30,36 @@ public class CapsuleController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CapsuleInfoResponse> getCapsule(@PathVariable("id") Long capsuleId) {
+    @GetMapping("/{capsuleId}")
+    public ResponseEntity<CapsuleInfoResponse> getCapsule(@PathVariable("capsuleId") Long capsuleId) {
         CapsuleInfoResponse response = capsuleService.getCapsule(capsuleId);
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<CapsuleInfoResponse>> getAllMyCapsule(@MemberId Long userId, Pageable pageable) {
+
+        Page<CapsuleInfoResponse> response = capsuleService.getMyAllCapsule(userId, pageable);
+
+        return ResponseEntity.ok(response);
+
+    }
+
     @GetMapping("/visible")
-    public ResponseEntity<List<CapsuleInfoResponse>> getAllVisibleCapsule() {
-        List<CapsuleInfoResponse> response = capsuleService.getAllVisibleCapsule();
+    public ResponseEntity<Page<CapsuleInfoResponse>> getAllVisibleCapsule(Pageable pageable) {
+        Page<CapsuleInfoResponse> response = capsuleService.getAllVisibleCapsule(pageable);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteCapsuleResponse> deleteCapsule(@PathVariable("id") Long capsuleId, @MemberId Long userId) {
-        DeleteCapsuleResponse response = capsuleService.deleteCapsule(userId);
+    @DeleteMapping("/{capsuleId}")
+    public ResponseEntity<DeleteCapsuleResponse> deleteCapsule(@PathVariable("capsuleId") Long capsuleId, @MemberId Long userId) {
+        DeleteCapsuleResponse response = capsuleService.deleteCapsule(userId, capsuleId);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ChangeCapsuleVisibilityResponse> changeCapsuleVisibility(@PathVariable("id") Long capsuleId) {
-        ChangeCapsuleVisibilityResponse response = capsuleService.changeCapsuleVisibility(capsuleId);
+    @PutMapping("/{capsuleId}")
+    public ResponseEntity<ChangeCapsuleVisibilityResponse> changeCapsuleVisibility(@PathVariable("capsuleId") Long capsuleId, ChangeCapsuleVisibilityRequest changeCapsuleVisibilityRequest) {
+        ChangeCapsuleVisibilityResponse response = capsuleService.changeCapsuleVisibility(capsuleId, changeCapsuleVisibilityRequest.visibility());
         return ResponseEntity.ok(response);
     }
 

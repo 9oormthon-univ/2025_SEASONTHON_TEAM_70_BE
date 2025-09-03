@@ -37,7 +37,7 @@ public class Capsule extends BaseTimeEntity {
         this.visibility = Visibility.HIDDEN;
     }
 
-    public void updateCapsule() {
-        this.visibility = Visibility.VISIBLE;
+    public void updateCapsule(Visibility visibility) {
+        this.visibility = visibility;
     }
 }

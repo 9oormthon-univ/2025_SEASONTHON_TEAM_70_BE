@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import team.bridgers.backend.domain.email.domain.VerificationCode;
 import team.bridgers.backend.domain.email.domain.VerificationCodeRepository;
+import team.bridgers.backend.domain.email.presentation.exception.VerificationCodeNotFoundException;
 
 import java.util.Optional;
 
@@ -14,8 +15,14 @@ public class VerificationCodeRepositoryImpl implements VerificationCodeRepositor
     private final VerificationCodeJpaRepository verificationCodeJpaRepository;
 
     @Override
-    public Optional<VerificationCode> findByEmail(String email) {
-        return verificationCodeJpaRepository.findByEmail(email);
+    public VerificationCode findByEmail(String email) {
+
+        Optional<VerificationCode> verificationCode = verificationCodeJpaRepository.findByEmail(email);
+
+        if(verificationCode.isPresent()) {
+            return verificationCode.get();
+        }
+        throw new VerificationCodeNotFoundException();
     }
 
     @Override

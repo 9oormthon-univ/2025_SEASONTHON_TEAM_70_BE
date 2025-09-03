@@ -9,8 +9,6 @@ import team.bridgers.backend.domain.email.domain.VerificationCodeRepository;
 import team.bridgers.backend.domain.email.dto.response.DeleteVerificationCodeResponse;
 import team.bridgers.backend.domain.email.dto.response.SendVerificationCodeResponse;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -39,27 +37,27 @@ public class EmailService {
                 .build();
         verificationCodeRepository.save(verificationCode);
 
-        Optional<VerificationCode> savedVerificationCode = verificationCodeRepository.findByEmail(email);
+        VerificationCode savedVerificationCode = verificationCodeRepository.findByEmail(email);
 
         return SendVerificationCodeResponse.builder()
-                .Id(savedVerificationCode.get().getId())
+                .Id(savedVerificationCode.getId())
                 .build();
     }
 
     public boolean verifyCode(String email, String code) {
 
-        Optional<VerificationCode> verificationCode = verificationCodeRepository.findByEmail(email);
-        return verificationCode.get().getCode().equals(code);
+        VerificationCode verificationCode = verificationCodeRepository.findByEmail(email);
+        return verificationCode.getCode().equals(code);
 
     }
 
     public DeleteVerificationCodeResponse deleteVerificationCode(String email) {
 
-        Optional<VerificationCode> verificationCode = verificationCodeRepository.findByEmail(email);
-        verificationCodeRepository.delete(verificationCode.get());
+        VerificationCode verificationCode = verificationCodeRepository.findByEmail(email);
+        verificationCodeRepository.delete(verificationCode);
 
         return DeleteVerificationCodeResponse.builder()
-                .Id(verificationCode.get().getId())
+                .Id(verificationCode.getId())
                 .build();
     }
 

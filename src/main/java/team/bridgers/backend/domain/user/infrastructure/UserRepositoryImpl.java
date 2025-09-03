@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
+import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundException;
 
 import java.util.Optional;
 
@@ -24,13 +25,28 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByUserId(Long userId) {
-        return userJpaRepository.findById(userId);
+    public User findById(Long userId) {
+
+        Optional<User> savedUser = userJpaRepository.findById(userId);
+
+        if(savedUser.isPresent()) {
+            return savedUser.get();
+        }
+
+        throw new UserNotFoundException();
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userJpaRepository.findByEmail(email);
+    public User findByEmail(String email) {
+
+        Optional<User> savedUser = userJpaRepository.findByEmail(email);
+
+        if(savedUser.isPresent()) {
+            return savedUser.get();
+        }
+
+        throw new UserNotFoundException();
+
     }
 
     @Override
@@ -39,8 +55,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByLoginId(String loginId) {
-        return userJpaRepository.findByLoginId(loginId);
+    public User findByLoginId(String loginId) {
+
+        Optional<User> savedUser = userJpaRepository.findByLoginId(loginId);
+
+        if(savedUser.isPresent()) {
+            return savedUser.get();
+        }
+
+        throw new UserNotFoundException();
     }
 
 }

@@ -4,7 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record DeleteCapsuleResponse(
-        Long capsuleId,
-        String title
+        Long capsuleId
 ) {
 }
