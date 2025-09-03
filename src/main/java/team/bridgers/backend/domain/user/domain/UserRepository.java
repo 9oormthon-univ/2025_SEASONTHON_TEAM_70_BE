@@ -8,12 +8,11 @@ public interface UserRepository {
 
     boolean existsByLoginId(String loginId);
 
-    Optional<User> findByUserId(Long userId);
-
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
 
     User save(User user);
 
-    Optional<User> findByLoginId(String loginId);
+    User findByLoginId(String loginId);
 
+    User findById(Long userId);
 }

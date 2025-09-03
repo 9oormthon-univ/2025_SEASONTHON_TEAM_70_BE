@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface VerificationCodeRepository {
 
-    Optional<VerificationCode> findByEmail(String email);
+    VerificationCode findByEmail(String email);
 
     void save(VerificationCode verificationCode);
 

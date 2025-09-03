@@ -6,8 +6,6 @@ import team.bridgers.backend.domain.user.domain.User;
 
 import java.util.Optional;
 
-@Repository
-
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     boolean existsByNickname(String nickname);
     boolean existsByLoginId(String loginId);

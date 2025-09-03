@@ -46,10 +46,10 @@ public class UserService {
 
         userRepository.save(user);
 
-        Optional<User> savedUser = userRepository.findByEmail(email);
-        if(savedUser.isPresent()) {
+        User savedUser = userRepository.findByEmail(email);
+        if(savedUser != null) {
             return SignUpResponse.builder()
-                    .Id(savedUser.get().getId())
+                    .Id(savedUser.getId())
                     .build();
         }
         throw new SignUpFailedException();
