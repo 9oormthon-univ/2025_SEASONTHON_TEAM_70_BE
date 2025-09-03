@@ -6,7 +6,7 @@ import team.bridgers.backend.domain.board.infrastructure.BoardRepository;
 
 @Service
 @RequiredArgsConstructor
-public class PostService {
+public class BoardService {
     private final BoardRepository boardRepository;
 
 }
