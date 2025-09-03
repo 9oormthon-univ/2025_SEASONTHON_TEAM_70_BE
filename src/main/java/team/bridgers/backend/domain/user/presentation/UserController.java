@@ -17,12 +17,12 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController{
+public class UserController implements UserDocsController {
 
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
         SignUpResponse response = userService.signUp(request);
 
         return ResponseEntity.ok(response);
