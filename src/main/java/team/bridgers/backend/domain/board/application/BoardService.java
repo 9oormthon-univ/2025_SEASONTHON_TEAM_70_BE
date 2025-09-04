@@ -15,7 +15,7 @@ import team.bridgers.backend.domain.board.presentation.response.BoardDetailRespo
 import team.bridgers.backend.domain.board.presentation.response.BoardPageResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardResponse;
 import team.bridgers.backend.domain.user.domain.User;
-import team.bridgers.backend.domain.user.domain.UserRepository;
+import team.bridgers.backend.domain.user.infrastructure.UserRepositoryImpl;
 import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundException;
 
 
@@ -23,7 +23,7 @@ import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundExce
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepositoryImpl boardRepository;
-    private final UserRepository userRepository;
+    private final UserRepositoryImpl userRepository;
 
     @Transactional
     public BoardResponse createBoard(BoardType boardType, Long userId, String boardTitle, String boardContent) {
@@ -51,6 +51,20 @@ public class BoardService {
                         .boardId(board.getBoardId())
                         .boardTitle(board.getBoardTitle())
                         .createdAt(board.getCreatedAt().toString())
+                        .userNickname(board.getUser().getNickname())
+                        .build());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BoardPageResponse> searchBoards(String keyword, BoardType boardType, int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        return boardRepository.searchBoards(keyword, boardType, pageable)
+                .map(board -> BoardPageResponse.builder()
+                        .boardId(board.getBoardId())
+                        .boardTitle(board.getBoardTitle())
+                        .createdAt(board.getCreatedAt().toString())
+                        .userNickname(board.getUser().getNickname())
                         .build());
     }
 

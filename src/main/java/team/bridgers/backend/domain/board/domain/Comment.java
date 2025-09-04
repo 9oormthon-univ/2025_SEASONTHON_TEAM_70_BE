@@ -19,17 +19,22 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false, length = 500)
     private String commentContent;
 
-    @Column(nullable = false)
-    private String commentUserNickname;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
     @Builder
-    private Comment(String commentContent, String commentUserNickname, Board board) {
+    private Comment(String commentContent, User user, Board board) {
         this.commentContent = commentContent;
-        this.commentUserNickname = commentUserNickname;
+        this.user = user;
         this.board = board;
+    }
+
+    public void updateCommentContent(String commentContent) {
+        this.commentContent = commentContent;
     }
 }

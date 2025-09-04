@@ -36,6 +36,16 @@ public class BoardController {
         return ResponseEntity.ok(boards);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<BoardPageResponse>> searchBoards(@RequestParam String keyword,
+                                                               @RequestParam(required = false) BoardType boardType,
+                                                               @RequestParam(value = "page", defaultValue = "0") int page,
+                                                               @RequestParam(value = "size", defaultValue = "10") int size,
+                                                               @RequestParam(value = "sortBy", defaultValue = "NEWEST") String sortBy) {
+        Page<BoardPageResponse> boards = boardService.searchBoards(keyword, boardType, page, size, sortBy);
+        return ResponseEntity.ok(boards);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BoardDetailResponse> getBoard(@PathVariable Long id) {
         BoardDetailResponse boardDetail = boardService.getBoard(id);

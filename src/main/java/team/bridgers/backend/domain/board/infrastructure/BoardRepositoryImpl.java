@@ -21,18 +21,8 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public Board findByBoardTitle(String title) {
-        return boardJpaRepository.findByBoardTitle(title).orElseThrow(BoardNotFoundExeption::new);
-    }
-
-    @Override
     public void delete(Board board) {
         boardJpaRepository.delete(board);
-    }
-
-    @Override
-    public Board findByBoardContent(String content) {
-        return boardJpaRepository.findByBoardContent(content).orElseThrow(BoardNotFoundExeption::new);
     }
 
     @Override
@@ -43,5 +33,14 @@ public class BoardRepositoryImpl implements BoardRepository {
     @Override
     public Page<Board> findAllByBoardType(BoardType type, Pageable pageable) {
         return boardJpaRepository.findAllByBoardType(type, pageable);
+    }
+
+    @Override
+    public Page<Board> searchBoards(String keyword, BoardType boardType, Pageable pageable) {
+        if (boardType != null) {
+            return boardJpaRepository.findByBoardTypeAndKeyword(boardType, keyword, pageable);
+        } else {
+            return boardJpaRepository.findByKeyword(keyword, pageable);
+        }
     }
 }
