@@ -52,4 +52,10 @@ public class UserTodo extends BaseTimeEntity {
         this.completed = false;
     }
 
+    public void updateUserTodo(String task, LocalDate deadLine, Priority priority) {
+        this.task = task;
+        this.deadLine = deadLine;
+        this.priority = priority;
+    }
+
 }
