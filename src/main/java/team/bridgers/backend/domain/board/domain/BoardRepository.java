@@ -7,9 +7,9 @@ public interface BoardRepository {
 
     Board findByBoardId(Long id);
 
-    Board findByTitle(String title);
+    Board findByBoardTitle(String title);
 
-    Board findByContent(String content);
+    Board findByBoardContent(String content);
 
     Page<Board> findAllByBoardType(BoardType type, Pageable pageable);
 

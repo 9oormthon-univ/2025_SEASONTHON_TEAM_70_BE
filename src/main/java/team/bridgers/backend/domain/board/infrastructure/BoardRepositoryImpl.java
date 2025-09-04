@@ -21,7 +21,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public Board findByTitle(String title) {
+    public Board findByBoardTitle(String title) {
         return boardJpaRepository.findByBoardTitle(title).orElseThrow(BoardNotFoundExeption::new);
     }
 
@@ -31,7 +31,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public Board findByContent(String content) {
+    public Board findByBoardContent(String content) {
         return boardJpaRepository.findByBoardContent(content).orElseThrow(BoardNotFoundExeption::new);
     }
 
