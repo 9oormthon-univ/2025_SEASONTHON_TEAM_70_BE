@@ -1,6 +1,7 @@
 package team.bridgers.backend.domain.usertodo.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.bridgers.backend.domain.user.domain.User;
@@ -12,6 +13,7 @@ import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoUpdateRequest;
 import team.bridgers.backend.domain.usertodo.dto.response.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -95,6 +97,12 @@ public class UserTodoService {
         return UserTodoUpdateResponse.builder()
                 .userTodoId(userTodo.getId())
                 .build();
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void deleteExpiredUserTodos() {
+        userTodoRepository.deleteByDeadLineBefore(LocalDate.now());
     }
 
 }
