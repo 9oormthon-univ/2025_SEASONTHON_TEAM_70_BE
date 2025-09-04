@@ -3,8 +3,12 @@ package team.bridgers.backend.domain.user.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import team.bridgers.backend.domain.study.domain.StudyGroup;
 import team.bridgers.backend.domain.user.presentation.exception.EmailOrPasswordNotInvalidException;
 import team.bridgers.backend.global.domain.BaseTimeEntity;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity
