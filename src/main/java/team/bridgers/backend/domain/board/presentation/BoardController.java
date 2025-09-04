@@ -11,6 +11,7 @@ import team.bridgers.backend.domain.board.domain.BoardType;
 import team.bridgers.backend.domain.board.presentation.request.BoardRequest;
 import team.bridgers.backend.domain.board.presentation.response.BoardDetailResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardPageResponse;
+import team.bridgers.backend.domain.board.presentation.response.BoardResponse;
 import team.bridgers.backend.global.annotation.MemberId;
 
 @RestController
@@ -20,9 +21,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<String> createBoard(@MemberId Long userId, @Valid BoardRequest boardRequest) {
-        boardService.createBoard(boardRequest.getBoardType(), userId, boardRequest.getBoardTitle(), boardRequest.getBoardContent());
-        return ResponseEntity.ok("게시판이 성공적으로 생성되었습니다.");
+    public ResponseEntity<BoardResponse> createBoard(@MemberId Long userId, @Valid @RequestBody BoardRequest boardRequest) {
+        BoardResponse response=boardService.createBoard(boardRequest.boardType(), userId, boardRequest.boardTitle(), boardRequest.boardContent());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/list")
@@ -42,14 +43,14 @@ public class BoardController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBoard(@PathVariable Long id, @MemberId Long userId) {
-        boardService.deleteBoard(id, userId);
-        return ResponseEntity.ok("게시판이 성공적으로 삭제되었습니다.");
+    public ResponseEntity<BoardResponse> deleteBoard(@PathVariable Long id, @MemberId Long userId) {
+        BoardResponse response = boardService.deleteBoard(id, userId);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBoard(@PathVariable Long id, @MemberId Long userId, @Valid BoardRequest boardRequest) {
-        boardService.updateBoard(id, userId, boardRequest.getBoardTitle(), boardRequest.getBoardContent());
-        return ResponseEntity.ok("게시판이 성공적으로 수정되었습니다.");
+    public ResponseEntity<BoardResponse> updateBoard(@PathVariable Long id, @MemberId Long userId, @Valid @RequestBody BoardRequest boardRequest) {
+        BoardResponse response = boardService.updateBoard(id, userId, boardRequest.boardTitle(), boardRequest.boardContent());
+        return ResponseEntity.ok(response);
     }
 }

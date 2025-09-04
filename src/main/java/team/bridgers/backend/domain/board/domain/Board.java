@@ -31,11 +31,8 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
-
     // 관심도 투표 및 매칭 등 복수 Entity 연결
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Vote> votes = new ArrayList<>();
 
     public void addVotes(List<Vote> votes) {
@@ -43,7 +40,7 @@ public class Board extends BaseTimeEntity {
     }
 
     @Builder
-    public Board(BoardType boardType, String boardTitle, String boardContent, User user) {
+    private Board(BoardType boardType, String boardTitle, String boardContent, User user) {
         this.boardType = boardType;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;

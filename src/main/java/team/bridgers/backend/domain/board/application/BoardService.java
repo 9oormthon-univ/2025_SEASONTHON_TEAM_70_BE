@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.bridgers.backend.domain.board.domain.Board;
 import team.bridgers.backend.domain.board.domain.BoardType;
-import team.bridgers.backend.domain.board.infrastructure.BoardRepository;
-import team.bridgers.backend.domain.board.presentation.exeption.BoardNotFoundExeption;
+import team.bridgers.backend.domain.board.infrastructure.BoardRepositoryImpl;
 import team.bridgers.backend.domain.board.presentation.exeption.BoardUnauthorizedAccessExeption;
 import team.bridgers.backend.domain.board.presentation.response.BoardDetailResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardPageResponse;
+import team.bridgers.backend.domain.board.presentation.response.BoardResponse;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
 import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundException;
@@ -22,11 +22,11 @@ import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundExce
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-    private final BoardRepository boardRepository;
+    private final BoardRepositoryImpl boardRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public void createBoard(BoardType boardType, Long userId, String boardTitle, String boardContent) {
+    public BoardResponse createBoard(BoardType boardType, Long userId, String boardTitle, String boardContent) {
         User user = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
 
         Board board = Board.builder()
@@ -36,6 +36,10 @@ public class BoardService {
                 .boardContent(boardContent)
                 .build();
         boardRepository.save(board);
+
+        return BoardResponse.builder()
+                .boardId(board.getBoardId())
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +56,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public BoardDetailResponse getBoard(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundExeption::new);
+        Board board = boardRepository.findByBoardId(id);
         return BoardDetailResponse.builder()
                 .boardId(board.getBoardId())
                 .boardTitle(board.getBoardTitle())
@@ -64,21 +68,28 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(Long id, Long userId) {
-        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundExeption::new);
+    public BoardResponse deleteBoard(Long id, Long userId) {
+        Board board = boardRepository.findByBoardId(id);
         if (!board.getUser().getId().equals(userId)) {
             throw new BoardUnauthorizedAccessExeption();
         }
         boardRepository.delete(board);
+
+        return  BoardResponse.builder()
+                .boardId(board.getBoardId())
+                .build();
     }
 
     @Transactional
-    public void updateBoard(Long id, Long userId, String boardTitle, String boardContent) {
-        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundExeption::new);
+    public BoardResponse updateBoard(Long id, Long userId, String boardTitle, String boardContent) {
+        Board board = boardRepository.findByBoardId(id);
         if (!board.getUser().getId().equals(userId)) {
             throw new BoardUnauthorizedAccessExeption();
         }
         board.update(boardTitle, boardContent);
-        boardRepository.save(board);
+
+        return BoardResponse.builder()
+                .boardId(board.getBoardId())
+                .build();
     }
 }

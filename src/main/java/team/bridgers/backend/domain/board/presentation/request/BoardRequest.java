@@ -1,11 +1,19 @@
 package team.bridgers.backend.domain.board.presentation.request;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import team.bridgers.backend.domain.board.domain.BoardType;
 
-@Getter
-public class BoardRequest {
-    private BoardType boardType;
-    private String boardTitle;
-    private String boardContent;
+@Builder
+public record BoardRequest(
+
+        @NotBlank
+        BoardType boardType,
+
+        @NotBlank
+        String boardTitle,
+
+        @NotBlank
+        String boardContent
+) {
 }

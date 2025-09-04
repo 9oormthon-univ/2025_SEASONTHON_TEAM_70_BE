@@ -28,7 +28,7 @@ public class Vote {
     private LocalDate votedDate;
 
     @Builder
-    public Vote(Board board, User user, LocalDate votedDate) {
+    private Vote(Board board, User user, LocalDate votedDate) {
         this.board = board;
         this.user = user;
         this.votedDate = votedDate;

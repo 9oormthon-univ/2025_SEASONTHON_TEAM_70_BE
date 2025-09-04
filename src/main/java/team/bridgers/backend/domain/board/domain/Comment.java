@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.bridgers.backend.domain.user.domain.User;
+import team.bridgers.backend.global.domain.BaseTimeEntity;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Comment {
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId; // 댓글 ID
@@ -18,19 +19,17 @@ public class Comment {
     @Column(nullable = false, length = 500)
     private String commentContent;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Board board; // 댓글이 달린 게시글
+    @Column(nullable = false)
+    private String commentUserNickname;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // 댓글 작성자
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
     @Builder
-    public Comment(String commentContent, Board board, User user) {
+    private Comment(String commentContent, String commentUserNickname, Board board) {
         this.commentContent = commentContent;
+        this.commentUserNickname = commentUserNickname;
         this.board = board;
-        this.user = user;
     }
-
 }

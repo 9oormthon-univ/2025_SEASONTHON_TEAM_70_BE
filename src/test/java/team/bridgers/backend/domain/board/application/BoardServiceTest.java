@@ -9,7 +9,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.Page;
 import team.bridgers.backend.domain.board.domain.Board;
 import team.bridgers.backend.domain.board.domain.BoardType;
-import team.bridgers.backend.domain.board.infrastructure.BoardRepository;
+import team.bridgers.backend.domain.board.infrastructure.BoardJpaRepository;
 import team.bridgers.backend.domain.board.presentation.exeption.BoardNotFoundExeption;
 import team.bridgers.backend.domain.board.presentation.response.BoardDetailResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardPageResponse;
@@ -25,7 +25,7 @@ class BoardServiceTest {
     @Autowired
     private BoardService boardService;
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardJpaRepository boardJpaRepository;
     @Autowired
     private UserJpaRepository userJpaRepository;
     @Autowired
@@ -35,7 +35,7 @@ class BoardServiceTest {
 
     @BeforeEach
     void setUp() {
-        boardRepository.deleteAll();
+        boardJpaRepository.deleteAll();
         userJpaRepository.deleteAllInBatch();
         user = User.builder()
                 .email("test@test.com")
@@ -52,7 +52,7 @@ class BoardServiceTest {
     @Test
     void createBoard_success() {
         boardService.createBoard(BoardType.FREE, user.getId(), "title", "content");
-        Board board = boardRepository.findAll().get(0);
+        Board board = boardJpaRepository.findAll().get(0);
         assertThat(board.getBoardTitle()).isEqualTo("title");
         assertThat(board.getBoardContent()).isEqualTo("content");
         assertThat(board.getUser().getId()).isEqualTo(user.getId());
@@ -66,10 +66,10 @@ class BoardServiceTest {
                 .boardContent("content")
                 .user(user)
                 .build();
-        boardRepository.save(board);
+        boardJpaRepository.save(board);
         BoardDetailResponse response = boardService.getBoard(board.getBoardId());
-        assertThat(response.getBoardId()).isEqualTo(board.getBoardId());
-        assertThat(response.getBoardTitle()).isEqualTo("title");
+        assertThat(response.boardId()).isEqualTo(board.getBoardId());
+        assertThat(response.boardTitle()).isEqualTo("title");
     }
 
     @Test
@@ -95,9 +95,9 @@ class BoardServiceTest {
                 .boardContent("content")
                 .user(user)
                 .build();
-        boardRepository.save(board);
+        boardJpaRepository.save(board);
         boardService.updateBoard(board.getBoardId(), user.getId(), "newTitle", "newContent");
-        Board updated = boardRepository.findById(board.getBoardId()).get();
+        Board updated = boardJpaRepository.findById(board.getBoardId()).get();
         assertThat(updated.getBoardTitle()).isEqualTo("newTitle");
         assertThat(updated.getBoardContent()).isEqualTo("newContent");
     }
@@ -117,9 +117,9 @@ class BoardServiceTest {
                 .boardContent("content")
                 .user(user)
                 .build();
-        boardRepository.save(board);
+        boardJpaRepository.save(board);
         boardService.deleteBoard(board.getBoardId(), user.getId());
-        assertThat(boardRepository.findById(board.getBoardId())).isEmpty();
+        assertThat(boardJpaRepository.findById(board.getBoardId())).isEmpty();
     }
 
     @Test
