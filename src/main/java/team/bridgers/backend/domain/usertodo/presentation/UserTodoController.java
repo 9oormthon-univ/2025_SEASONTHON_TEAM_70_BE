@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.bridgers.backend.domain.usertodo.application.UserTodoService;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
+import team.bridgers.backend.domain.usertodo.dto.request.UserTodoUpdateRequest;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSaveResponse;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSummaryListResponse;
 import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateCompletedResponse;
+import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateResponse;
 import team.bridgers.backend.global.annotation.MemberId;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -44,6 +46,16 @@ public class UserTodoController {
             @RequestParam(defaultValue = "") String sortBy
     ) {
         UserTodoSummaryListResponse response = userTodoService.getAllUserTodos(userId, sortBy);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{userTodoId}")
+    public ResponseEntity<UserTodoUpdateResponse> updateUserTodo(
+            @MemberId Long userId,
+            @PathVariable Long userTodoId,
+            @Valid @RequestBody UserTodoUpdateRequest request
+    ) {
+        UserTodoUpdateResponse response = userTodoService.updateUserTodo(userId, userTodoId, request);
         return ResponseEntity.ok(response);
     }
 

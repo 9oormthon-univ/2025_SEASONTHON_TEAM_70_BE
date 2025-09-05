@@ -9,10 +9,8 @@ import team.bridgers.backend.domain.usertodo.domain.Priority;
 import team.bridgers.backend.domain.usertodo.domain.UserTodo;
 import team.bridgers.backend.domain.usertodo.domain.UserTodoRepository;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoDetailResponse;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSaveResponse;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSummaryListResponse;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateCompletedResponse;
+import team.bridgers.backend.domain.usertodo.dto.request.UserTodoUpdateRequest;
+import team.bridgers.backend.domain.usertodo.dto.response.*;
 
 import java.util.List;
 
@@ -79,6 +77,23 @@ public class UserTodoService {
 
         return UserTodoSummaryListResponse.builder()
                 .userTodoDetailResponses(detailResponses)
+                .build();
+    }
+
+    @Transactional
+    public UserTodoUpdateResponse updateUserTodo(Long userId, Long userTodoId, UserTodoUpdateRequest request) {
+        userRepository.findById(userId);
+
+        UserTodo userTodo = userTodoRepository.findByUserTodoId(userTodoId);
+
+        userTodo.updateUserTodo(
+                request.task(),
+                request.deadLine(),
+                Priority.valueOf(request.priority())
+        );
+
+        return UserTodoUpdateResponse.builder()
+                .userTodoId(userTodo.getId())
                 .build();
     }
 
