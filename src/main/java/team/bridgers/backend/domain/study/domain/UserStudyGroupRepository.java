@@ -4,10 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import team.bridgers.backend.domain.user.domain.User;
 
+import java.util.Optional;
+
 public interface UserStudyGroupRepository {
     Page<UserStudyGroup> findByStudyGroup(StudyGroup studyGroup, Pageable pageable);
 
     Page<UserStudyGroup> findByUser(User user, Pageable pageable);
 
     UserStudyGroup save(UserStudyGroup userStudyGroup);
+
+    UserStudyGroup findById(Long userStudyGroupId);
 }
