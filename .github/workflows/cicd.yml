@@ -46,3 +46,27 @@ jobs:
 
     - name: docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/bridgers:latest
+
+  run-docker-image-on-ec2:
+      needs: build-docker-image
+      runs-on: self-hosted
+    
+      steps:
+        - name: docker pull latest image
+          run: |
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bridgers:latest
+      
+        - name: stop & remove all containers
+          run: |
+            sudo docker ps -aq | xargs -r sudo docker stop
+            sudo docker ps -aq | xargs -r sudo docker rm
+      
+        - name: run spring boot container
+          run: |
+            sudo docker run -d \
+              --name bridgers_app \
+              -p 8080:8080 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/bridgers:latest
+      
+        - name: prune unused docker data
+          run: sudo docker system prune -f
