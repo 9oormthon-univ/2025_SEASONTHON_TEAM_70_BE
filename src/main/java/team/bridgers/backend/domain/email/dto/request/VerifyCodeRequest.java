@@ -2,10 +2,12 @@ package team.bridgers.backend.domain.email.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Schema(description = "인증 코드 검증 요청")
+@Builder
 public record VerifyCodeRequest(
 
         @NotBlank(message = "인증 이메일 주소를 입력해 주세요.")

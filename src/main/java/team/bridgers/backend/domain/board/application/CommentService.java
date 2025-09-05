@@ -33,7 +33,7 @@ public class CommentService {
     public CommentResponse createComment(Long memberId, Long boardId, String commentContent) {
         validateCommentContent(commentContent);
 
-        User user = userRepository.findByUserId(memberId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(memberId);
         Board board = boardRepository.findByBoardId(boardId);
 
         Comment comment = Comment.builder()
