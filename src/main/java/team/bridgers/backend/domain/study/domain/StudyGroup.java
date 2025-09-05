@@ -28,16 +28,13 @@ public class StudyGroup extends BaseTimeEntity {
 
     private int personnel;
 
-    private LocalDate createdDate;
-
     private GroupType type;
 
     @Builder
-    private StudyGroup(String name, String content, LocalDate createdDate, GroupType type) {
+    private StudyGroup(String name, String content, GroupType type) {
         this.name = name;
         this.content = content;
         this.personnel = 1;
-        this.createdDate = createdDate;
         this.type = type;
     }
 

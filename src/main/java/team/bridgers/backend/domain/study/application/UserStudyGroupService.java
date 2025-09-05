@@ -67,7 +67,7 @@ public class UserStudyGroupService {
                 .name(userStudyGroup.getStudyGroup().getName())
                 .content(userStudyGroup.getStudyGroup().getContent())
                 .personnel(userStudyGroup.getStudyGroup().getPersonnel())
-                .createdDate(userStudyGroup.getStudyGroup().getCreatedDate())
+                .createdAt(userStudyGroup.getStudyGroup().getCreatedAt())
                 .type(userStudyGroup.getStudyGroup().getType())
                 .build());
     }

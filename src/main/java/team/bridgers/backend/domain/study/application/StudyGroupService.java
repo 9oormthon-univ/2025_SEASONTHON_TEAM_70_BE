@@ -9,10 +9,7 @@ import team.bridgers.backend.domain.study.domain.StudyGroupRepository;
 import team.bridgers.backend.domain.study.dto.request.CreateStudyGroupRequest;
 import team.bridgers.backend.domain.study.dto.response.CreateStudyGroupResponse;
 import team.bridgers.backend.domain.study.dto.response.StudyGroupInfoResponse;
-import team.bridgers.backend.domain.study.infrastructure.StudyGroupRepositoryImpl;
 import team.bridgers.backend.domain.study.presentation.exception.DuplicateGroupNameException;
-
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +24,6 @@ public class StudyGroupService {
         StudyGroup studyGroup = StudyGroup.builder()
                 .name(request.name())
                 .content(request.content())
-                .createdDate(LocalDate.now())
                 .type(request.type())
                 .build();
 
@@ -45,7 +41,7 @@ public class StudyGroupService {
                 .name(studyGroup.getName())
                 .content(studyGroup.getContent())
                 .personnel(studyGroup.getPersonnel())
-                .createdDate(studyGroup.getCreatedDate())
+                .createdAt(studyGroup.getCreatedAt())
                 .type(studyGroup.getType())
                 .build();
     }
@@ -57,7 +53,7 @@ public class StudyGroupService {
                 .name(studyGroup.getName())
                 .content(studyGroup.getContent())
                 .personnel(studyGroup.getPersonnel())
-                .createdDate(studyGroup.getCreatedDate())
+                .createdAt(studyGroup.getCreatedAt())
                 .type(studyGroup.getType())
                 .build());
     }
