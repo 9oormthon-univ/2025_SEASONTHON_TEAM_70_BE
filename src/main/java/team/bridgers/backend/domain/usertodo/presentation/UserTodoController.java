@@ -10,6 +10,8 @@ import team.bridgers.backend.domain.usertodo.dto.request.UserTodoUpdateRequest;
 import team.bridgers.backend.domain.usertodo.dto.response.*;
 import team.bridgers.backend.global.annotation.MemberId;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RequiredArgsConstructor
@@ -64,5 +66,15 @@ public class UserTodoController {
         UserTodoDeleteResponse response = userTodoService.deleteUserTodo(userId, userTodoId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<CompletedTodoStatsResponse>> getCompletedStats(
+            @MemberId Long userId,
+            @RequestParam String period
+    ) {
+        List<CompletedTodoStatsResponse> response = userTodoService.getCompletedStats(userId, period);
+        return ResponseEntity.ok(response);
+    }
+
 
 }

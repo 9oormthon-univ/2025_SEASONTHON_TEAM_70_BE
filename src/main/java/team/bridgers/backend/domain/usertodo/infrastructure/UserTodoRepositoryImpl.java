@@ -1,6 +1,7 @@
 package team.bridgers.backend.domain.usertodo.infrastructure;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.usertodo.domain.UserTodo;
@@ -37,13 +38,28 @@ public class UserTodoRepositoryImpl implements UserTodoRepository {
     }
 
     @Override
-    public void deleteByDeadLineBefore(LocalDate deadline) {
-        userTodoJpaRepository.deleteByDeadLineBefore(deadline);
+    public void deleteByDeadLineBeforeAndCompletedFalse(LocalDate deadline) {
+        userTodoJpaRepository.deleteByDeadLineBeforeAndCompletedFalse(deadline);
     }
 
     @Override
     public void delete(UserTodo userTodo) {
         userTodoJpaRepository.delete(userTodo);
+    }
+
+    @Override
+    public List<Object[]> countCompletedTodosByDay(@Param("userId") Long userId) {
+        return userTodoJpaRepository.countCompletedTodosByDay(userId);
+    }
+
+    @Override
+    public List<Object[]> countCompletedTodosByWeek(@Param("userId") Long userId) {
+        return userTodoJpaRepository.countCompletedTodosByWeek(userId);
+    }
+
+    @Override
+    public List<Object[]> countCompletedTodosByMonth(@Param("userId") Long userId) {
+        return userTodoJpaRepository.countCompletedTodosByMonth(userId);
     }
 
 }
