@@ -7,6 +7,7 @@ import team.bridgers.backend.domain.usertodo.domain.UserTodo;
 import team.bridgers.backend.domain.usertodo.domain.UserTodoRepository;
 import team.bridgers.backend.domain.usertodo.presentation.exception.UserTodoNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,6 +34,16 @@ public class UserTodoRepositoryImpl implements UserTodoRepository {
             case "deadline" -> userTodoJpaRepository.findAllByUserOrderByDeadLineAsc(user);
             default -> userTodoJpaRepository.findAllByUserOrderByCreatedAtDesc(user);
         };
+    }
+
+    @Override
+    public void deleteByDeadLineBefore(LocalDate deadline) {
+        userTodoJpaRepository.deleteByDeadLineBefore(deadline);
+    }
+
+    @Override
+    public void delete(UserTodo userTodo) {
+        userTodoJpaRepository.delete(userTodo);
     }
 
 }

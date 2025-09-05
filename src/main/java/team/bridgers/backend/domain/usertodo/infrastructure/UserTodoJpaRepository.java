@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.usertodo.domain.UserTodo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserTodoJpaRepository extends JpaRepository<UserTodo, Long> {
@@ -20,5 +21,7 @@ public interface UserTodoJpaRepository extends JpaRepository<UserTodo, Long> {
     List<UserTodo> findAllByUserOrderByPriorityDesc(User user);
 
     List<UserTodo> findAllByUserOrderByDeadLineAsc(User user);
+
+    void deleteByDeadLineBefore(LocalDate deadline);
 
 }
