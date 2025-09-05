@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.bridgers.backend.domain.board.domain.Board;
+import team.bridgers.backend.domain.board.domain.BoardRepository;
 import team.bridgers.backend.domain.board.domain.BoardType;
 import team.bridgers.backend.domain.board.infrastructure.BoardRepositoryImpl;
 import team.bridgers.backend.domain.board.presentation.exeption.BoardUnauthorizedAccessExeption;
@@ -15,6 +16,7 @@ import team.bridgers.backend.domain.board.presentation.response.BoardDetailRespo
 import team.bridgers.backend.domain.board.presentation.response.BoardPageResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardResponse;
 import team.bridgers.backend.domain.user.domain.User;
+import team.bridgers.backend.domain.user.domain.UserRepository;
 import team.bridgers.backend.domain.user.infrastructure.UserRepositoryImpl;
 import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundException;
 
@@ -22,8 +24,8 @@ import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundExce
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-    private final BoardRepositoryImpl boardRepository;
-    private final UserRepositoryImpl userRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public BoardResponse createBoard(BoardType boardType, Long userId, String boardTitle, String boardContent) {

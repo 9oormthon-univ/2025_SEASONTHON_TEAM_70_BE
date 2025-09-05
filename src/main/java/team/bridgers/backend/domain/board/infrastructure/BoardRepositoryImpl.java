@@ -17,7 +17,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public Board findByBoardId(Long id) {
-        return boardJpaRepository.findById(id).orElseThrow(BoardNotFoundExeption::new);
+        return boardJpaRepository.findByBoardId(id).orElseThrow(BoardNotFoundExeption::new);
     }
 
     @Override
