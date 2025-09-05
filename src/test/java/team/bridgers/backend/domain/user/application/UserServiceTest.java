@@ -46,10 +46,7 @@ class UserServiceTest {
     void signUpWithoutVerification() {
         SignUpRequest request = signUpRequest(UserType.JOBSEEKER);
 
-        userService.signUp(
-                request.loginId(), request.nickname(), request.email(), request.password(),
-                request.confirmPassword(),request.gender(), request.birthday(), request.type()
-        );
+        userService.signUp(request);
 
         Optional<User> user = userJpaRepository.findByEmail(request.email());
 
