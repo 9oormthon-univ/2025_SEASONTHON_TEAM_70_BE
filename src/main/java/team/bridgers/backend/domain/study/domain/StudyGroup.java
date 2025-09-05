@@ -36,9 +36,13 @@ public class StudyGroup extends BaseTimeEntity {
     private StudyGroup(String name, String content, LocalDate createdDate, GroupType type) {
         this.name = name;
         this.content = content;
-        this.personnel = 0;
+        this.personnel = 1;
         this.createdDate = createdDate;
         this.type = type;
+    }
+
+    public void updatePersonnel() {
+        this.personnel++;
     }
 
 }

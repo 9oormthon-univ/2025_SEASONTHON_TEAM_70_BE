@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import team.bridgers.backend.domain.study.domain.GroupType;
 import team.bridgers.backend.domain.study.domain.StudyGroup;
 import team.bridgers.backend.domain.study.domain.StudyGroupRepository;
+import team.bridgers.backend.domain.study.presentation.exception.GroupNotFoundException;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,19 +22,19 @@ public class StudyGroupRepositoryImpl implements StudyGroupRepository {
     @Override
     public StudyGroup findByName(String name) {
         return studyGroupJpaRepository.findByName(name)
-                .orElseThrow();
+                .orElseThrow(GroupNotFoundException::new);
     }
 
     @Override
     public StudyGroup findByType(GroupType type) {
         return studyGroupJpaRepository.findByType(type)
-                .orElseThrow();
+                .orElseThrow(GroupNotFoundException::new);
     }
 
     @Override
     public StudyGroup findById(Long groupId) {
         return studyGroupJpaRepository.findById(groupId)
-                .orElseThrow();
+                .orElseThrow(GroupNotFoundException::new);
     }
 
     @Override

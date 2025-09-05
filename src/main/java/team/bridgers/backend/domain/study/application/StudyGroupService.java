@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.bridgers.backend.domain.study.domain.StudyGroup;
+import team.bridgers.backend.domain.study.domain.StudyGroupRepository;
 import team.bridgers.backend.domain.study.dto.request.CreateStudyGroupRequest;
 import team.bridgers.backend.domain.study.dto.response.CreateStudyGroupResponse;
 import team.bridgers.backend.domain.study.dto.response.StudyGroupInfoResponse;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class StudyGroupService {
-    private final StudyGroupRepositoryImpl studyGroupRepository;
+    private final StudyGroupRepository studyGroupRepository;
 
     public CreateStudyGroupResponse createStudyGroup(CreateStudyGroupRequest request) {
         if (studyGroupRepository.existsByName(request.name())) {
