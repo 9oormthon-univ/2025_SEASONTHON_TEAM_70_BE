@@ -1,6 +1,7 @@
 package team.bridgers.backend.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,9 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+
+    @Value("${security.server-url}")
+    private String serverUrl;
 
     private final JwtTokenFilter jwtTokenFilter;
 
@@ -65,7 +69,7 @@ public class SecurityConfig {
         httpSecurity.cors(cors -> cors.configurationSource(request -> {
             var corsConfiguration = new CorsConfiguration();
             corsConfiguration.setAllowedOrigins(List.of(
-                    "http://localhost:8080"));
+                    "http://localhost:8080", serverUrl));
             corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
             corsConfiguration.setAllowedHeaders(List.of("*"));
             corsConfiguration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
