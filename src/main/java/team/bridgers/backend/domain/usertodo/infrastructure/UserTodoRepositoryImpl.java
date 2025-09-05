@@ -41,4 +41,9 @@ public class UserTodoRepositoryImpl implements UserTodoRepository {
         userTodoJpaRepository.deleteByDeadLineBefore(deadline);
     }
 
+    @Override
+    public void delete(UserTodo userTodo) {
+        userTodoJpaRepository.delete(userTodo);
+    }
+
 }

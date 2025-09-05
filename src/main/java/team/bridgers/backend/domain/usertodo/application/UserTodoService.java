@@ -105,4 +105,16 @@ public class UserTodoService {
         userTodoRepository.deleteByDeadLineBefore(LocalDate.now());
     }
 
+    @Transactional
+    public UserTodoDeleteResponse deleteUserTodo(Long userId, Long userTodoId) {
+        userRepository.findById(userId);
+        UserTodo userTodo = userTodoRepository.findByUserTodoId(userTodoId);
+
+        userTodoRepository.delete(userTodo);
+
+        return UserTodoDeleteResponse.builder()
+                .userTodoId(userTodo.getId())
+                .build();
+    }
+
 }
