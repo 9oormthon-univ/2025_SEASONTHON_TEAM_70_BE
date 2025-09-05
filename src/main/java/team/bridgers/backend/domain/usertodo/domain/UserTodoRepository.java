@@ -15,4 +15,6 @@ public interface UserTodoRepository {
 
     void deleteByDeadLineBefore(LocalDate deadline);
 
+    void delete(UserTodo userTodo);
+
 }

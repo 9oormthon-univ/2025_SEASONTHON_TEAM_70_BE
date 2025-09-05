@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import team.bridgers.backend.domain.usertodo.application.UserTodoService;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoUpdateRequest;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSaveResponse;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoSummaryListResponse;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateCompletedResponse;
-import team.bridgers.backend.domain.usertodo.dto.response.UserTodoUpdateResponse;
+import team.bridgers.backend.domain.usertodo.dto.response.*;
 import team.bridgers.backend.global.annotation.MemberId;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -56,6 +53,15 @@ public class UserTodoController {
             @Valid @RequestBody UserTodoUpdateRequest request
     ) {
         UserTodoUpdateResponse response = userTodoService.updateUserTodo(userId, userTodoId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{userTodoId}")
+    public ResponseEntity<UserTodoDeleteResponse> deleteUserTodo(
+            @MemberId Long userId,
+            @PathVariable Long userTodoId
+    ) {
+        UserTodoDeleteResponse response = userTodoService.deleteUserTodo(userId, userTodoId);
         return ResponseEntity.ok(response);
     }
 
