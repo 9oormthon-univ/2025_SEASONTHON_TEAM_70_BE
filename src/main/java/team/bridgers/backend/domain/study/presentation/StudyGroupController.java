@@ -22,8 +22,8 @@ public class StudyGroupController {
     private final UserStudyGroupService userStudyGroupService;
 
     @PostMapping
-    public ResponseEntity<CreateStudyGroupResponse> createStudyGroup(@RequestBody CreateStudyGroupRequest request) {
-        CreateStudyGroupResponse response = studyGroupService.createStudyGroup(request);
+    public ResponseEntity<CreateStudyGroupResponse> createStudyGroup(@RequestBody CreateStudyGroupRequest request, @MemberId Long userId) {
+        CreateStudyGroupResponse response = studyGroupService.createStudyGroup(request, userId);
 
         return ResponseEntity.ok(response);
     }
