@@ -1,5 +1,6 @@
 package team.bridgers.backend.domain.usertodo.domain;
 
+import org.springframework.data.repository.query.Param;
 import team.bridgers.backend.domain.user.domain.User;
 
 import java.time.LocalDate;
@@ -13,8 +14,14 @@ public interface UserTodoRepository {
 
     List<UserTodo> findAllByUser(User user, String sortBy);
 
-    void deleteByDeadLineBefore(LocalDate deadline);
+    void deleteByDeadLineBeforeAndCompletedFalse(LocalDate deadline);
 
     void delete(UserTodo userTodo);
+
+    List<Object[]> countCompletedTodosByDay(@Param("userId") Long userId);
+
+    List<Object[]> countCompletedTodosByWeek(@Param("userId") Long userId);
+
+    List<Object[]> countCompletedTodosByMonth(@Param("userId") Long userId);
 
 }

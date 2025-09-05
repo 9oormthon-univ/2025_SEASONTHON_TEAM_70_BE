@@ -12,6 +12,7 @@ import team.bridgers.backend.domain.usertodo.domain.UserTodoRepository;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoSaveRequest;
 import team.bridgers.backend.domain.usertodo.dto.request.UserTodoUpdateRequest;
 import team.bridgers.backend.domain.usertodo.dto.response.*;
+import team.bridgers.backend.domain.usertodo.presentation.exception.InvalidPeriodException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -102,7 +103,7 @@ public class UserTodoService {
     @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void deleteExpiredUserTodos() {
-        userTodoRepository.deleteByDeadLineBefore(LocalDate.now());
+        userTodoRepository.deleteByDeadLineBeforeAndCompletedFalse(LocalDate.now());
     }
 
     @Transactional
@@ -115,6 +116,26 @@ public class UserTodoService {
         return UserTodoDeleteResponse.builder()
                 .userTodoId(userTodo.getId())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CompletedTodoStatsResponse> getCompletedStats(Long userId, String period) {
+        List<Object[]> results;
+
+        switch (period) {
+            case "day" -> results = userTodoRepository.countCompletedTodosByDay(userId);
+            case "week" -> results = userTodoRepository.countCompletedTodosByWeek(userId);
+            case "month" -> results = userTodoRepository.countCompletedTodosByMonth(userId);
+            default -> throw new InvalidPeriodException();
+        }
+
+        return results.stream()
+                .map(r -> CompletedTodoStatsResponse.builder()
+                        .period(r[0].toString())
+                        .completedCount(((Number) r[1]).intValue())
+                        .build()
+                )
+                .toList();
     }
 
 }
