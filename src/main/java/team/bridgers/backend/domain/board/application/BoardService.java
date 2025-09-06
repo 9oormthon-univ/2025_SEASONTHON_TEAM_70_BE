@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import team.bridgers.backend.domain.board.domain.Board;
 import team.bridgers.backend.domain.board.domain.BoardRepository;
 import team.bridgers.backend.domain.board.domain.BoardType;
+import team.bridgers.backend.domain.board.domain.VoteRepository;
 import team.bridgers.backend.domain.board.presentation.exeption.BoardUnauthorizedAccessExeption;
 import team.bridgers.backend.domain.board.presentation.response.BoardDetailResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardPageResponse;
 import team.bridgers.backend.domain.board.presentation.response.BoardResponse;
 import team.bridgers.backend.domain.user.domain.User;
 import team.bridgers.backend.domain.user.domain.UserRepository;
-import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundException;
 
 
 @Service
@@ -24,6 +24,7 @@ import team.bridgers.backend.domain.user.presentation.exception.UserNotFoundExce
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     @Transactional
     public BoardResponse createBoard(BoardType boardType, Long userId, String boardTitle, String boardContent) {
@@ -105,5 +106,16 @@ public class BoardService {
         return BoardResponse.builder()
                 .boardId(board.getBoardId())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BoardPageResponse> getPopularBoards(BoardType boardType, Pageable pageable) {
+        Page<Board> boards = boardRepository.findPopularBoards(boardType, pageable);
+        return boards.map(board -> BoardPageResponse.builder()
+                .boardId(board.getBoardId())
+                .boardTitle(board.getBoardTitle())
+                .createdAt(board.getCreatedAt().toString())
+                .userNickname(board.getUser().getNickname())
+                .build());
     }
 }

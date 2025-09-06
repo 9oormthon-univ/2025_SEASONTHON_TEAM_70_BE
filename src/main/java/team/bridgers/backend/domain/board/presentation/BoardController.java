@@ -4,6 +4,7 @@ package team.bridgers.backend.domain.board.presentation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.bridgers.backend.domain.board.application.BoardService;
@@ -24,6 +25,15 @@ public class BoardController {
     public ResponseEntity<BoardResponse> createBoard(@MemberId Long userId, @Valid @RequestBody BoardRequest boardRequest) {
         BoardResponse response=boardService.createBoard(boardRequest.boardType(), userId, boardRequest.boardTitle(), boardRequest.boardContent());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/popular/list")
+    public ResponseEntity<Page<BoardPageResponse>> getPopularBoards(@RequestParam(required = false) BoardType boardType,
+                                                                    @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                    @RequestParam(value = "size", defaultValue = "10") int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<BoardPageResponse> boards = boardService.getPopularBoards(boardType, pageable);
+        return ResponseEntity.ok(boards);
     }
 
     @GetMapping("/list")
