@@ -14,7 +14,7 @@ import team.bridgers.backend.domain.board.infrastructure.CommentJpaRepository;
 import team.bridgers.backend.domain.board.presentation.exeption.BoardNotFoundExeption;
 import team.bridgers.backend.domain.board.presentation.exeption.CommentNotFoundException;
 import team.bridgers.backend.domain.board.presentation.exeption.CommentUnauthorizedAccessExeption;
-import team.bridgers.backend.domain.board.presentation.exeption.ContentLengthExceeded;
+import team.bridgers.backend.domain.board.presentation.exeption.ContentLengthExceededException;
 import team.bridgers.backend.domain.board.presentation.response.CommentDetailResponse;
 import team.bridgers.backend.domain.board.presentation.response.CommentResponse;
 import team.bridgers.backend.domain.user.domain.Gender;
@@ -149,7 +149,7 @@ class CommentServiceTest {
         String longComment = "a".repeat(501); // 500자 초과
 
         // when & then
-        assertThrows(ContentLengthExceeded.class, () ->
+        assertThrows(ContentLengthExceededException.class, () ->
             commentService.createComment(testUser.getId(), testBoard.getBoardId(), longComment));
     }
 
@@ -264,7 +264,7 @@ class CommentServiceTest {
         String longComment = "a".repeat(501);
 
         // when & then
-        assertThrows(ContentLengthExceeded.class, () ->
+        assertThrows(ContentLengthExceededException.class, () ->
             commentService.updateComment(savedComment.getCommentId(), testUser.getId(), longComment));
     }
 

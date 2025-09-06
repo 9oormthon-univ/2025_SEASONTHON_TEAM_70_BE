@@ -26,6 +26,11 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public Page<Board> findPopularBoards(BoardType boardType, Pageable pageable) {
+        return boardJpaRepository.findPopularBoards(boardType, pageable);
+    }
+
+    @Override
     public Board save(Board board) {
         return boardJpaRepository.save(board);
     }
