@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequiredArgsConstructor
 @RequestMapping("/user-todos")
 @RestController
-public class UserTodoController {
+public class UserTodoController implements UserTodoDocsController {
 
     private final UserTodoService userTodoService;
 
